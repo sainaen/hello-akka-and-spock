@@ -23,14 +23,17 @@ public class HelloAkkaJava {
     }
 
     public static class Greeter extends UntypedActor {
-        public String greeting = "";
+        public GreetFormat format = new GreetFormat("");
+        public Whom whomToGreet = new Whom("");
 
         @Override
         public void onReceive(Object message) throws Exception {
             if (message instanceof Whom) {
-                greeting = "Hello, " + ((Whom) message).whom + "!";
+                whomToGreet = (Whom) message;
+            } else if (message instanceof GreetFormat) {
+                format = (GreetFormat) message;
             } else if (message instanceof Greet) {
-                getSender().tell(new Greeting(greeting), getSelf());
+                getSender().tell(new Greeting(format, whomToGreet), getSelf());
             } else {
                 unhandled(message);
             }
@@ -39,9 +42,9 @@ public class HelloAkkaJava {
 
     public static class GreetPrinter extends UntypedActor {
         @Override
-        public void onReceive(Object o) throws Exception {
-            if (o instanceof Greeting) {
-                System.out.println(((Greeting) o).message);
+        public void onReceive(Object message) throws Exception {
+            if (message instanceof Greeting) {
+                System.out.println(((Greeting) message).message);
             }
         }
     }
@@ -55,10 +58,17 @@ public class HelloAkkaJava {
         }
     }
 
+    public static class GreetFormat implements Serializable {
+        public final String format;
+        public GreetFormat(String format) {
+            this.format = format;
+        }
+    }
+
     public static class Greeting implements Serializable {
         public final String message;
-        public Greeting(String message) {
-            this.message = message;
+        public Greeting(GreetFormat greetFormat, Whom whomToGreet) {
+            this.message = String.format(greetFormat.format, whomToGreet.whom);
         }
     }
 }
