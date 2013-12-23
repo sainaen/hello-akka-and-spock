@@ -11,6 +11,8 @@ public class HelloAkkaJava {
     public static void main(String[] args) {
         final ActorSystem system = ActorSystem.create("hello-akka");
         final ActorRef greeter = system.actorOf(Props.create(Greeter.class), "greeter");
+
+        greeter.tell(new Whom("World"), ActorRef.noSender());
     }
 
     public static class Greeter extends UntypedActor {
