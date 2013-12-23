@@ -1,11 +1,16 @@
 package org.sainaen;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 import akka.actor.UntypedActor;
 
 import java.io.Serializable;
 
 public class HelloAkkaJava {
     public static void main(String[] args) {
+        final ActorSystem system = ActorSystem.create("hello-akka");
+        final ActorRef greeter = system.actorOf(Props.create(Greeter.class), "greeter");
     }
 
     public static class Greeter extends UntypedActor {
