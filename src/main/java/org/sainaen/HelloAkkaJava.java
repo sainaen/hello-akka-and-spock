@@ -1,9 +1,7 @@
 package org.sainaen;
 
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
-import akka.actor.UntypedActor;
+import akka.actor.*;
+import scala.concurrent.duration.Duration;
 
 import java.io.Serializable;
 
@@ -11,8 +9,13 @@ public class HelloAkkaJava {
     public static void main(String[] args) {
         final ActorSystem system = ActorSystem.create("hello-akka");
         final ActorRef greeter = system.actorOf(Props.create(Greeter.class), "greeter");
+        final Inbox inbox = Inbox.create(system);
 
         greeter.tell(new Whom("World"), ActorRef.noSender());
+        inbox.send(greeter, new Greet());
+
+        Greeting greeting = (Greeting) inbox.receive(Duration.create(5, "seconds"));
+        System.out.println("Greeting: " + greeting.message);
     }
 
     public static class Greeter extends UntypedActor {
