@@ -23,7 +23,7 @@ public class HelloAkkaJava {
     }
 
     public static class Greeter extends UntypedActor {
-        String greeting = "";
+        public String greeting = "";
 
         @Override
         public void onReceive(Object message) throws Exception {
