@@ -4,6 +4,7 @@ import akka.actor.*;
 import scala.concurrent.duration.Duration;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 public class HelloAkkaJava {
     public static void main(String[] args) {
@@ -13,9 +14,12 @@ public class HelloAkkaJava {
 
         greeter.tell(new Whom("World"), ActorRef.noSender());
         inbox.send(greeter, new Greet());
-
         Greeting greeting = (Greeting) inbox.receive(Duration.create(5, "seconds"));
         System.out.println("Greeting: " + greeting.message);
+
+        final ActorRef printer = system.actorOf(Props.create(GreetPrinter.class), "printer");
+        // schedule( initialDelay, interval, receiver, message, executor, sender );
+        system.scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.SECONDS), greeter, new Greet(), system.dispatcher(), printer);
     }
 
     public static class Greeter extends UntypedActor {
