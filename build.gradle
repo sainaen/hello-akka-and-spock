@@ -1,11 +1,17 @@
 apply plugin: "java"
+apply plugin: "groovy"
 
 repositories {
     mavenCentral()
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "http://oss.sonatype.org/content/groups/public/" }
 }
 
 dependencies {
-    compile "com.typesafe.akka:akka-actor_2.10:2.2.3"
+    compile "com.typesafe.akka:akka-actor_2.10:2.3-M1"
+
+    testCompile "com.typesafe.akka:akka-testkit_2.10:2.3-M1",
+            "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
 }
 
 task wrapper(type: Wrapper) {
