@@ -33,6 +33,15 @@ public class HelloAkkaJava {
         }
     }
 
+    public static class GreetPrinter extends UntypedActor {
+        @Override
+        public void onReceive(Object o) throws Exception {
+            if (o instanceof Greeting) {
+                System.out.println(((Greeting) o).message);
+            }
+        }
+    }
+
     public static class Greet implements Serializable {}
 
     public static class Whom implements Serializable {
