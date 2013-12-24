@@ -1,12 +1,10 @@
-import akka.actor.Inbox
-import akka.testkit.TestActor
-import junit.framework.Test
-import scala.concurrent.duration.Duration;
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
+import akka.actor.Inbox
 import akka.actor.Props
 import akka.testkit.TestActorRef
 import org.sainaen.HelloAkkaJava
+import scala.concurrent.duration.Duration
 import spock.lang.Shared
 import spock.lang.Specification
 
